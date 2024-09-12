@@ -1,1 +1,0 @@
-curl -LsS https://phar.io/releases/phive.phar -o /usr/local/bin/phive

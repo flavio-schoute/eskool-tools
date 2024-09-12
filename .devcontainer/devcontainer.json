@@ -15,7 +15,8 @@
 				"esbenp.prettier-vscode",
 				"vscphp.vscode-php-debug",
                 "dbaeumer.vscode-eslint",
-				"ms-azuretools.vscode-docker"
+				"ms-azuretools.vscode-docker",
+				"ms-vscode.makefile-tools"
 			],
 			"settings": {}
 		}

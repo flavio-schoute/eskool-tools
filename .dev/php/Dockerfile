@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     libssl-dev \
     libsqlite3-dev \
+    gnupg2 \
     && apt-get clean
 
 # Installeer Xdebug voor debugging
@@ -32,8 +33,13 @@ RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Installeer Phive voor PHP-tools
-RUN curl -LsS https://phar.io/releases/phive.phar -o /usr/local/bin/phive \
-    && chmod +x /usr/local/bin/phive
+RUN curl -LsS https://phar.io/releases/phive.phar -o phive.phar \
+    && curl -LsS https://phar.io/releases/phive.phar.asc -o phive.phar.asc \
+    && gpg --keyserver hkps://keys.openpgp.org --recv-keys 0x9D8A98B29B2D5D79 \
+    && gpg --verify phive.phar.asc phive.phar \
+    && chmod +x phive.phar \
+    && mv phive.phar /usr/local/bin/phive \
+    && rm phive.phar.asc
 
 # Installeer PHP-extensies voor Laravel
 RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
