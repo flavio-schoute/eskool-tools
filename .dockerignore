@@ -1,0 +1,25 @@
+# Node modules, niet nodig in de Docker image
+node_modules
+
+# Logs, kunnen gegenereerd worden in de container
+*.log
+
+# Laravel cache-bestanden
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+# Gulp en andere build tools output
+public/build
+
+# .env-bestanden (gevoelige informatie, zoals API sleutels of wachtwoorden)
+.env
+
+# Docker-compose override bestanden
+docker-compose.override.yml
+
+# Git-bestanden, niet nodig in de Docker-image
+.git
+.gitignore
+
+# VSCode instellingen en metadata
+.vscode

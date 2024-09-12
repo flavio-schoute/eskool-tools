@@ -1,0 +1,26 @@
+// https://aka.ms/devcontainer.json
+{
+	"name": "eSkool Tools",
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "php",
+	"workspaceFolder": "/var/www/html",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"mikestead.dotenv",
+				"redhat.vscode-yaml",
+				"bmewburn.vscode-intelephense-client",
+				"esbenp.prettier-vscode",
+				"vscphp.vscode-php-debug",
+                "dbaeumer.vscode-eslint",
+				"ms-azuretools.vscode-docker"
+			],
+			"settings": {}
+		}
+	},
+	"remoteUser": "eskapp",
+	"postCreateCommand": "chown -R 1000:1000 /var/www/html 2>/dev/null || true",
+    "shutdownAction": "stopCompose"
+}

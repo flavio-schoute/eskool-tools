@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "798ee4bc17f94ed4bfd4407744149170",
+    "content-hash": "35d2ae174237eaf444ced12d9dd35a0e",
     "packages": [
         {
             "name": "brick/math",
@@ -6376,6 +6376,43 @@
                 }
             ],
             "time": "2024-08-03T15:32:23+00:00"
+        },
+        {
+            "name": "paqtcom/coding-standards",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paqtcom/coding-standards.git",
+                "reference": "e12a728818c1b457a455a74fbc2f3ff40b07aef3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paqtcom/coding-standards/zipball/e12a728818c1b457a455a74fbc2f3ff40b07aef3",
+                "reference": "e12a728818c1b457a455a74fbc2f3ff40b07aef3",
+                "shasum": ""
+            },
+            "conflict": {
+                "friendsofphp/php-cs-fixer": "<3.11",
+                "larastan/larastan": "<2.7.0",
+                "nunomaduro/larastan": "*",
+                "php": "<8.0",
+                "phpmd/phpmd": "<2.0",
+                "phpstan/phpstan": "<0.12.50",
+                "squizlabs/php_codesniffer": "<3.0"
+            },
+            "suggest": {
+                "larastan/larastan": "Provides phpstan extension specifically aimed towards Laravel"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "description": "PAQT.com Coding Standards",
+            "support": {
+                "source": "https://github.com/paqtcom/coding-standards/tree/2.1.1"
+            },
+            "time": "2024-01-09T08:32:31+00:00"
         },
         {
             "name": "phar-io/manifest",

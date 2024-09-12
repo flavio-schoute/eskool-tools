@@ -1,0 +1,7 @@
+includes:
+    - ../vendor/paqtcom/coding-standards/rules/larastan.neon
+
+parameters:
+    paths:
+        - app
+        - database
