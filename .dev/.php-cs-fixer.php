@@ -8,6 +8,6 @@ $finder = PhpCsFixer\Finder::create()
     ]);
 
 /** @var PhpCsFixer\Config $config */
-$config = include __DIR__ . 'vendor/paqtcom/coding-standards/rules/php-cs-fixer.php';
+$config = include __DIR__ . '/../vendor/paqtcom/coding-standards/rules/php-cs-fixer.php';
 
 return $config->setFinder($finder);

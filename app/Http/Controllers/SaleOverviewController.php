@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Client as GuzzleHttpClient;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -50,7 +49,7 @@ class SaleOverviewController extends Controller
         // Convert Order objects to arrays
         $orders = collect($orders)->map(function (Order $order) {
             $fullName = $order->billing()->contact()->firstName() . ' ' . $order->billing()->contact()->lastName();
-            
+
             // Get all item labels from itemInternal
             $productLabels = collect($order->items())->flatMap(function (Item $item) {
                 return [$item->label()];
@@ -61,7 +60,7 @@ class SaleOverviewController extends Controller
                 'invoice_number' => $order->invoiceNumber(),
                 'invoice_date' => $order->createdAt(),
                 'full_name' => $fullName,
-                'product' => $productLabels->implode(', '), 
+                'product' => $productLabels->implode(', '),
                 'amount_excluding_vat' => $order->amount(),
             ];
         })->toArray();
@@ -79,7 +78,7 @@ class SaleOverviewController extends Controller
         );
 
         return view('sales-overview.index', [
-            'orders' => $paginatedOrders
+            'orders' => $paginatedOrders,
         ]);
     }
 
@@ -109,7 +108,7 @@ class SaleOverviewController extends Controller
             ->find($id);
 
         return view('sales-overview.show', [
-            'order' => $order
+            'order' => $order,
         ]);
     }
 }
