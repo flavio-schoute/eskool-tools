@@ -22,4 +22,4 @@ yarn-error.log
 dock.old
 tools/*
 .php-cs-fixer.cache
-.phpmd.result.cache.phpmd
+.phpmd.result-cache.php
