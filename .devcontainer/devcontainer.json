@@ -14,7 +14,7 @@
 				"bmewburn.vscode-intelephense-client",
 				"esbenp.prettier-vscode",
 				"vscphp.vscode-php-debug",
-                "dbaeumer.vscode-eslint",
+				"dbaeumer.vscode-eslint",
 				"ms-azuretools.vscode-docker",
 				"ms-vscode.makefile-tools"
 			],
@@ -23,5 +23,5 @@
 	},
 	"remoteUser": "eskapp",
 	"postCreateCommand": "chown -R 1000:1000 /var/www/html 2>/dev/null || true",
-    "shutdownAction": "stopCompose"
+	"shutdownAction": "stopCompose"
 }

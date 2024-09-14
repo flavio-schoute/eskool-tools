@@ -20,3 +20,6 @@ php-fix: vendor php-lint-cs
 
 test: vendor
 	@vendor/bin/phpunit tests
+
+test-coverage: vendor
+	@php -dpcov.enabled=1 -dpcov.directory=. vendor/bin/phpunit --coverage-html ./.report

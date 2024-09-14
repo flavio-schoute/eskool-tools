@@ -23,9 +23,9 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs
 
-# Installeer Xdebug voor debugging
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
+# Installeer Xdebug voor debugging en PCOV voor code coverage
+RUN pecl install xdebug pcov \
+    && docker-php-ext-enable xdebug pcov
 
 # Configureer Xdebug voor debugging
 RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
