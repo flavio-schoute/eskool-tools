@@ -19,6 +19,10 @@ RUN apt-get update && apt-get install -y \
     gnupg2 \
     && apt-get clean
 
+# Installeer Node.js en npm
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
 # Installeer Xdebug voor debugging
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
@@ -43,9 +47,6 @@ RUN curl -LsS https://phar.io/releases/phive.phar -o phive.phar \
 
 # Installeer PHP-extensies voor Laravel
 RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
-
-# Verander de eigenaar van de directory naar de standaard gebruiker www-data
-# RUN chown -R www-data:www-data /var/www/html
 
 # Maak een gebruiker en groep aan voor sail
 RUN groupadd --force -g 1000 eskapp \

@@ -18,12 +18,12 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'blue': '#1d6be5',
+                'orange': '#ff914f',
+                'dark-blue': '#03104d'
+            },
         },
-        colors: {
-            'blue': '#1d6be5',
-            'orange': '#ff914f',
-            'dark-blue': '#03104d'
-        }
     },
 
     plugins: [forms],
