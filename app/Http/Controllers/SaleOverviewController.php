@@ -20,10 +20,14 @@ class SaleOverviewController extends Controller
 {
     public function index(Request $request): View
     {
+        /** @var int $page */
         $page = $request->get('page') ?? 1;
 
+        /** @var string $accessToken */
+        $accessToken = config('services.plug_and_pay.api_key');
+
         $client = new Client(
-            accessToken: config('services.plug_and_pay.api_key')
+            accessToken: $accessToken
         );
 
         $orderService = new OrderService($client);
@@ -47,11 +51,11 @@ class SaleOverviewController extends Controller
         $orders = BodyToOrder::buildMulti($orderResponse->body()['data']);
 
         // Convert Order objects to arrays
-        $orders = collect($orders)->map(function (Order $order) {
+        $orders = collect($orders)->map(function (Order $order): array {
             $fullName = $order->billing()->contact()->firstName() . ' ' . $order->billing()->contact()->lastName();
 
             // Get all item labels from itemInternal
-            $productLabels = collect($order->items())->flatMap(function (Item $item) {
+            $productLabels = collect($order->items())->flatMap(function (Item $item): array {
                 return [$item->label()];
             })->unique()->values();
 
@@ -85,15 +89,19 @@ class SaleOverviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): View
     {
-        // dd('Work', $request);
+        // Todo: Implement
+        return view('');
     }
 
-    public function show(int $id)
+    public function show(int $id): View
     {
+        /** @var string $accessToken */
+        $accessToken = config('services.plug_and_pay.api_key');
+
         $client = new Client(
-            accessToken: config('services.plug_and_pay.api_key')
+            accessToken: $accessToken
         );
 
         $orderService = new OrderService($client);

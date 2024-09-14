@@ -21,3 +21,5 @@ yarn-error.log
 .DS_STORE
 dock.old
 tools/*
+.php-cs-fixer.cache
+.phpmd.result.cache.phpmd
