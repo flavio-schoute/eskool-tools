@@ -1,21 +1,35 @@
-https://tailwindui.com/components/application-ui/application-shells/sidebar
+# eSkool Tools
+
+## Roles
+ 
+- Admin
+- Closer
+- Setter
+
+## Permissions
+
+- Admin
+    - All Permissions but with some extra
+        - Change comission
+        - Remove closer/ setter or disable account
+- Closer
+    - Claim order
+    - View order
+    - Commission breakdown
+    - Comission export
+- Setter
+    - Same permissions as closer
+
 
 ## Commands:
 
-### PHP-CS-Fixer
-
 ```bash
-vendor/bin/php-cs-fixer fix --config=.dev/php-cs-fixer.php --show-progress=dots
+make fix
 ```
 
-### PHPStan
-
 ```bash
-vendor/bin/phpstan analyze --configuration=.dev/phpstan.neon
+make lint
 ```
 
-### PHPMD
-
-```bash
-vendor/bin/phpmd controllers text .dev/phpmd.xml
-```
+### Inspiration sidebar:
+> https://tailwindui.com/components/application-ui/application-shells/sidebar
