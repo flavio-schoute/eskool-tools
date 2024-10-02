@@ -1,4 +1,4 @@
-<nav class="w-full max-w-64 flex h-screen border-r-2 border-r-[#e6e7e8] p-4 bg-white ">
+<nav class="w-full max-w-64 flex min-h-screen border-r-2 border-r-[#e6e7e8] p-4 bg-white ">
     <div class="w-full">
         <div>
             <x-application-logo class="block h-9 w-auto fill-current" />

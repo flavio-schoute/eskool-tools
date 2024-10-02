@@ -12,7 +12,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('sales-overview', SaleOverviewController::class)->only(['index', 'store', 'show']);
+Route::middleware('auth')->group(function () {
+    Route::resource('sales-overview', SaleOverviewController::class)->only(['index', 'store', 'show']);
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

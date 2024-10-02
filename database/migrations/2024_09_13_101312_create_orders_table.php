@@ -11,6 +11,7 @@ return new class () extends Migration {
             $table->id();
 
             $table->string('order_id');
+
             $table->string('invoice_number');
 
             $table->dateTime('invoice_date');
