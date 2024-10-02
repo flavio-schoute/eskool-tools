@@ -41,22 +41,36 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                             {{ $order['full_name'] }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace text-sm text-gray-500">
                                             {{ $order['product'] }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             €{{ $order['amount_excluding_vat'] }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-bold">
-                                            <form method="GET" action="{{ route('sales-overview.show', $order['id']) }}" class="inline">
-                                                @csrf
-                                                <button type="submit" class="text-indigo-600 hover:text-indigo-900 mr-2">View</button>
-                                            </form>
+                                            <!-- Actions -->
+                                            <div class="sm:flex sm:items-center sm:ms-6 inline">
+                                                <x-dropdown align="right" width="48">
+                                                    <x-slot name="trigger">
+                                                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                                            <span>{{ __('Actions') }}</span>
 
-                                            <form method="POST" action="{{ route('sales-overview.store', $order) }}" class="inline">
-                                                @csrf
-                                                <button type="submit" class="text-green-600 hover:text-green-900">Claim</button>
-                                            </form>
+                                                            <div class="ms-1">
+                                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                                </svg>
+                                                            </div>
+                                                        </button>
+                                                    </x-slot>
+
+                                                    <x-slot name="content">
+                                                        <x-dropdown-link :href="route('debtor-management.store', $order)">
+                                                            {{ __('Doorzetten naar Debtt') }}
+                                                        </x-dropdown-link>
+                                                    </x-slot>
+                                                </x-dropdown>
+                                            </div>
+
                                         </td>
                                     </tr>
                                      <?php $rowIndex++; ?>

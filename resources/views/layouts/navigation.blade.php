@@ -17,6 +17,10 @@
                 <x-nav-link :href="route('sales-overview.index')" :active="request()->routeIs('sales-overview.index')">
                     {{ __('Sales overzicht') }}
                 </x-nav-link>
+
+                <x-nav-link :href="route('debtor-management.index')" :active="request()->routeIs('debtor-management.index')">
+                    {{ __('Debiteuren overzicht') }}
+                </x-nav-link>
             </ul>
         </div>
     </div>

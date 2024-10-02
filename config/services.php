@@ -38,4 +38,9 @@ return [
     'plug_and_pay' => [
         'api_key' =>   env('PLUG_AND_PAY_API_KEY'),
     ],
+
+    'debtt' => [
+        'api_url' => env('DEBTT_API_URL'),
+        'api_key' => env('DEBTT_API_URL'),
+    ],
 ];

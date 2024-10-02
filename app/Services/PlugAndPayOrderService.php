@@ -30,7 +30,7 @@ class PlugAndPayOrderService
             ->invoiceStatus(InvoiceStatus::FINAL)
             ->productGroup('educatie')
             ->page($page)
-            ->paymentStatus(PaymentStatus::PAID);
+            ->paymentStatus(PaymentStatus::PAID, PaymentStatus::OPEN);
 
         return (new OrderService($client))
             ->include(
