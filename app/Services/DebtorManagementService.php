@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Http;
 
 class DebtorManagementService
 {
-    public function handleIncollectibeInvoices() {
+    public function handleIncollectibeInvoices()
+    {
         // $invoice = $this->event->data->object;
         // $stripe = Cashier::stripe();
 
