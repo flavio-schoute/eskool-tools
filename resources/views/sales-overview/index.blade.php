@@ -32,27 +32,22 @@
                                 <?php $rowIndex = 0; ?>
                                 @foreach ($orders as $order)
                                     <tr class="{{ $rowIndex % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $order['invoice_number'] }}
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <button onclick="Livewire.dispatch('openModal', { component: 'view-invoice', arguments: { orderId: {{ $order['id'] }} }})" class="hover:text-blue-500 hover:underline">{{ $order['invoice_number'] }}</button>                                       
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             {{ $order['invoice_date']->format('Y-m-d H:i:s') }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             {{ $order['full_name'] }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 text-sm">
                                             {{ $order['product'] }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             €{{ $order['amount_excluding_vat'] }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-bold">
-                                            <form method="GET" action="{{ route('sales-overview.show', $order['id']) }}" class="inline">
-                                                @csrf
-                                                <button type="submit" class="text-indigo-600 hover:text-indigo-900 mr-2">View</button>
-                                            </form>
-
                                             <form method="POST" action="{{ route('sales-overview.store', $order) }}" class="inline">
                                                 @csrf
                                                 <button type="submit" class="text-green-600 hover:text-green-900">Claim</button>

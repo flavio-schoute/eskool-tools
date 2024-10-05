@@ -13,6 +13,8 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        @livewire('wire-elements-modal')
     </head>
     <body class="font-sans antialiased bg-[#f1f4f8]">
         <div class="min-h-screen flex">
