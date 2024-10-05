@@ -34,7 +34,7 @@ class DebtorManagementController extends Controller
         );
 
         return view('debtor-management.index', [
-            'orders' => $paginatedOrders
+            'orders' => $paginatedOrders,
         ]);
     }
 

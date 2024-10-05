@@ -24,7 +24,7 @@ class ViewInvoice extends ModalComponent
         $order = $this->orderService->findOrder($this->orderId);
 
         return view('livewire.view-invoice', [
-            'order' => $order
+            'order' => $order,
         ]);
     }
 
@@ -32,7 +32,6 @@ class ViewInvoice extends ModalComponent
     {
         return '5xl';
     }
-
 
     public static function closeModalOnClickAway(): bool
     {

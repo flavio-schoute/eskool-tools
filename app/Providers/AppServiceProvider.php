@@ -2,9 +2,7 @@
 
 namespace App\Providers;
 
-use App\Livewire\ViewInvoice;
 use App\Models\User;
-use App\Services\PlugAndPayOrderService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
