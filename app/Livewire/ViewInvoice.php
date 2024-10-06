@@ -11,7 +11,7 @@ class ViewInvoice extends ModalComponent
 {
     public int $orderId;
 
-    private readonly PlugAndPayOrderService $orderService;
+    private PlugAndPayOrderService $orderService;
 
     public function mount(int $orderId): void
     {
@@ -21,6 +21,7 @@ class ViewInvoice extends ModalComponent
 
     public function render(): View
     {
+        // TODO: Fix Typed property App\Livewire\ViewInvoice::$orderService must not be accessed before initialization
         $order = $this->orderService->findOrder($this->orderId);
 
         return view('livewire.view-invoice', [
