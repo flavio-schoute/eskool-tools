@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl leading-tight">
+        <x-header>
             {{ __('Verkoop overzicht') }}
-        </h2>
+        </x-header>
     </x-slot>
 
     <div class="py-12">
