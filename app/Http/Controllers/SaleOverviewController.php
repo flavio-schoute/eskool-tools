@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
+use App\Http\Requests\ClaimOrderRequest;
 use App\Http\Requests\PaginationRequest;
+use App\Models\ClaimedOrder;
+use App\Models\Order;
 use App\Services\PlugAndPayOrderService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PlugAndPay\Sdk\Director\BodyTo\BodyToOrder;
+use PlugAndPay\Sdk\Enum\InvoiceStatus;
+use PlugAndPay\Sdk\Enum\Mode;
+use PlugAndPay\Sdk\Enum\PaymentStatus;
 
 class SaleOverviewController extends Controller
 {
@@ -16,19 +25,23 @@ class SaleOverviewController extends Controller
 
     public function index(PaginationRequest $request): View
     {
-        $orderResponse = $this->orderService->getOrders(
-            $request->getPage()
-        );
+        $filters = [
+            'mode' => Mode::LIVE,
+            'invoiceStatus' => InvoiceStatus::FINAL,
+            'productGroup' => 'educatie',
+            'paymentStatus' => [PaymentStatus::PAID, PaymentStatus::OPEN],
+        ];
+
+        $orderResponse = $this->orderService->getOrders($filters, $request->getPage());
 
         $orders = $this->orderService->mapOrdersToArray(
-            BodyToOrder::buildMulti($orderResponse['data'])
+            orders: BodyToOrder::buildMulti($orderResponse['data'])
         );
 
         $paginatedOrders = $this->orderService->paginateOrders(
             orders: $orders,
-            total: $orderResponse['meta']['total'],
-            perPage: $orderResponse['meta']['per_page'],
-            currentPage: $orderResponse['meta']['current_page']
+            meta: $orderResponse['meta'],
+            path: '/sales-overview'
         );
 
         return view('sales-overview.index', [
@@ -36,11 +49,30 @@ class SaleOverviewController extends Controller
         ]);
     }
 
-    public function store(): View
+    public function store(ClaimOrderRequest $request)
     {
-        // $validData = $request->validated();
+        $validatedData = $request->validated();
+        
+        // Todo: Fix correct data and id
+        $order = Order::query()->create([
+            'plug_and_play_order_id' => '123',
+            'invoice_number' => $validatedData->invoice_number,
+            'invoice_date' => '01-01-2024',
+            'full_name' => $validatedData->full_name,
+            'products' => $validatedData->product,
+            'price' => $validatedData->amount_excluding_vat,
+            'price_with_tax' => $validatedData->amount
+        ]);
 
-        return view('');
+        ClaimedOrder::query()->create([
+            'order_id' => $order->id,
+            'user_id' => Auth::user()->id,
+            'status' => OrderStatus::CLAIMED
+        ]);
+
+        session()->flash('message', 'Post successfully updated.');
+
+        return redirect()->route('sales-overview.index')->with('success', 'Order claimed!');
     }
 
     public function show(int $id): View

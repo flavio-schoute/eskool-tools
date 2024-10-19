@@ -5,97 +5,141 @@ namespace App\Services;
 use Illuminate\Pagination\LengthAwarePaginator;
 use PlugAndPay\Sdk\Entity\Item;
 use PlugAndPay\Sdk\Entity\Order;
-use PlugAndPay\Sdk\Enum\InvoiceStatus;
-use PlugAndPay\Sdk\Enum\Mode;
 use PlugAndPay\Sdk\Enum\OrderIncludes;
-use PlugAndPay\Sdk\Enum\PaymentStatus;
 use PlugAndPay\Sdk\Filters\OrderFilter;
-use PlugAndPay\Sdk\Service\Client;
 use PlugAndPay\Sdk\Service\OrderService;
 
 class PlugAndPayOrderService
 {
-    public function getOrders(int $page = 1): array
+    public function __construct(
+        private OrderService $orderService
+    ) {
+    }
+
+    public function getOrders(array $filters = [], int $page = 1, array $includes = []): array
     {
-        // TODO: Init once
-        /** @var string $accessToken */
-        $accessToken = config('services.plug_and_pay.api_key');
+        $orderFilter = $this->buildOrderFilter($filters, $page);
 
-        $client = new Client(
-            accessToken: $accessToken
-        );
+        $orderService = $this->orderService->withPagination();
 
-        $orderFilter = (new OrderFilter())
-            ->mode(Mode::LIVE)
-            ->invoiceStatus(InvoiceStatus::FINAL)
-            ->productGroup('educatie')
-            ->page($page)
-            ->paymentStatus(PaymentStatus::PAID, PaymentStatus::OPEN);
-
-        return (new OrderService($client))
-            ->include(
+        if (!empty($includes)) {
+            $orderService->include(...$includes);
+        } else {
+            $orderService->include(
                 OrderIncludes::BILLING,
                 OrderIncludes::ITEMS,
                 OrderIncludes::PAYMENT,
                 OrderIncludes::TAXES,
-            )
-            ->withPagination()
-            ->get($orderFilter);
+            );
+        }
+
+        return $orderService->get($orderFilter);
     }
 
-    public function findOrder(int $id): Order
+    public function findOrder(int $id, array $includes = []): Order
     {
-        /** @var string $accessToken */
-        $accessToken = config('services.plug_and_pay.api_key');
+        $orderService = $this->orderService;
 
-        $client = new Client(
-            accessToken: $accessToken
-        );
-
-        return (new OrderService($client))
-            ->include(
+        if (!empty($included)) {
+            $orderService->include(...$includes);
+        } else {
+            $orderService->include(
                 OrderIncludes::BILLING,
+                OrderIncludes::COMMENTS,
+                OrderIncludes::DISCOUNTS,
                 OrderIncludes::ITEMS,
                 OrderIncludes::PAYMENT,
-                OrderIncludes::TAXES,
-            )
-            ->find($id);
+                OrderIncludes::TAXES
+            );
+        }
+
+        return $orderService->find($id);
     }
 
-    /**
-     * @param Order[] $orders
-     */
     public function mapOrdersToArray(array $orders): array
     {
-        // Convert Order objects to arrays
         return collect($orders)->map(function (Order $order): array {
-            $fullName = $order->billing()->contact()->firstName() . ' ' . $order->billing()->contact()->lastName();
+            $customer = $order->billing()->contact();
+            $fullName = $customer->firstName() . ' ' . $customer->lastName();
 
-            // Get all item labels from itemInternal
             $productLabels = collect($order->items())->flatMap(function (Item $item): array {
                 return [$item->label()];
             })->unique()->values();
 
+            $address = $order->billing()->address();
+            $street = $address->street();
+            $houseNumber = $address->houseNumber();
+
+            $payment = $order->payment();
+
             return [
+                // General information
                 'id' => $order->id(),
                 'invoice_number' => $order->invoiceNumber(),
+                'invoice_status' => $order->invoiceStatus()->value,
                 'invoice_date' => $order->createdAt(),
-                'full_name' => $fullName,
+                'invoice_mode' => $order->mode()->value,
+
+                // Customer information
+                'customer_full_name' => $fullName,
+                'customer_email' => $customer->email(),
+                'customer_first_name' => $customer->firstName(),
+                'customer_last_name' => $customer->lastName(),
+                'customer_phone_number' => $customer->telephone(),
+                'customer_company' => $customer->company(),
+                'customer_vat_id' => $customer->vatIdNumber(),
+                'customer_tax_exempt' => $customer->taxExempt()->value,
+
+                // Customer address information
+                'customer_address' => "$street $houseNumber",
+                'customer_street' => $street,
+                'customer_house_number' => $houseNumber,
+                'customer_zipcode' => $address->zipcode(),
+                'customer_city' => $address->city(),
+                'customer_country' => $address->country()->value,
+
+                // Product information
                 'product' => $productLabels->implode(', '),
                 'amount' => $order->amount(),
-                'amount_excluding_vat' => $order->amount(),
+                'amount_with_tax' => $order->amountWithTax(),
+
+                // Payment information
+                'mollie_customer_id' => $payment->customerId(),
+                'payment_method' => $payment->method()?->value,
+                'invoice_paid_at' => $payment->paidAt(),
+                'payment_provider' => $payment->provider()?->value,
+                'payment_status' => $payment->status()->value,
+                'transaction_id' => $payment->transactionId(),
             ];
         })->toArray();
     }
 
-    public function paginateOrders(mixed $orders, int $total, int $perPage, int $currentPage): LengthAwarePaginator
+    public function paginateOrders(mixed $orders, array $meta, string $path = ''): LengthAwarePaginator
     {
         return new LengthAwarePaginator(
             $orders,
-            $total,
-            $perPage,
-            $currentPage,
-            ['path' => '/sales-overview']
+            $meta['total'],
+            $meta['per_page'],
+            $meta['current_page'],
+            ['path' => $path]
         );
+    }
+
+    private function buildOrderFilter(array $filters, int $page): OrderFilter
+    {
+        $orderFilter = new OrderFilter();
+        $orderFilter->page($page);
+
+        foreach ($filters as $method => $value) {
+            if (method_exists($orderFilter, $method)) {
+                if (is_array($value)) {
+                    $orderFilter->{$method}(...$value);
+                } else {
+                    $orderFilter->{$method}($value);
+                }
+            }
+        }
+
+        return $orderFilter;
     }
 }

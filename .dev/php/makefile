@@ -1,9 +1,15 @@
-php-lint: php-lint-cs-fixer php-lint-cs php-lint-md php-lint-stan
+php-lint: php-cs-fixer php-lint-cs php-lint-cs-fix php-lint-md php-lint-stan
 
-php-lint-cs-fixer:
-	@vendor/bin/phpcs --standard=.dev/php/phpcs.xml -ps
+vendor: composer.json composer.lock
+	@composer install
+
+php-cs-fixer:
+	@vendor/bin/php-cs-fixer fix --config=.dev/php/.php-cs-fixer.php --show-progress=dots
 
 php-lint-cs:
+	@vendor/bin/phpcs --standard=.dev/php/phpcs.xml -ps
+
+php-lint-cs-fix:
 	@vendor/bin/phpcbf --standard=.dev/php/phpcs.xml -p
 
 php-lint-md:
@@ -11,12 +17,6 @@ php-lint-md:
 
 php-lint-stan:
 	@vendor/bin/phpstan analyze -c .dev/php/phpstan.neon --memory-limit=2G
-
-vendor: composer.json composer.lock
-	@composer install
-
-php-fix: vendor php-lint-cs
-	@vendor/bin/php-cs-fixer fix --config=.dev/php/.php-cs-fixer.php --show-progress=dots
 
 test: vendor
 	@vendor/bin/phpunit tests

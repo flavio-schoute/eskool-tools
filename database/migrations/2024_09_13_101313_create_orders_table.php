@@ -10,7 +10,7 @@ return new class () extends Migration {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
 
-            $table->string('order_id');
+            $table->string('plug_and_play_order_id');
 
             $table->string('invoice_number');
 

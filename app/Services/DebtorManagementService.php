@@ -6,8 +6,53 @@ use Illuminate\Support\Facades\Http;
 
 class DebtorManagementService
 {
-    public function handleIncollectibeInvoices()
+    public function __construct(
+        private readonly PlugAndPayOrderService $orderService
+    ) {
+    }
+
+    // TOOD: Refactor
+    public function handleIncollectibeInvoices(int $orderId)
     {
+        /** @var string $url */
+        $url = config('services.debtt.api_url');
+
+        /** @var string $authKey */
+        $authKey = config('services.debtt.api_key');
+
+        $order = $this->orderService->findOrder($orderId);
+
+        if (empty($order->billing()->contact()->company())) {
+            $debtorType = 'particulier';
+        } else {
+            $debtorType = 'zakelijk';
+        }
+
+        $request = Http::post($url, [
+            'function' => 'createcase',
+            'auth' => $authKey,
+            'debiteur' => [
+                [
+                    'vorm' => $debtorType,
+        //             'naam' => $invoice->customer_name,
+        //             'adres' => $invoice->customer_address->line1,
+        //             'postcode' => $invoice->customer_address->postal_code,
+        //             'plaats' => $invoice->customer_address->city,
+        //             'email' => $invoice->customer_email,
+        //             'mobiel' => $invoice->customer_phone,
+        //             'debiteurnr' => $invoice->number.'-uncollectable-api',
+        //             'factuur' => [
+        //                 [
+        //                     'nummer' => $invoice->number,
+        //                     'datum' => Carbon::createFromTimestamp($invoice->created)->format('d-m-Y'),
+        //                     'vervaldatum' => Carbon::createFromTimestamp($invoice->created)->format('d-m-Y'),
+        //                     'bedrag' => $invoice->amount_paid / 100,
+        //                 ],
+        //             ],
+                ],
+            ],
+        ]);
+
         // $invoice = $this->event->data->object;
         // $stripe = Cashier::stripe();
 
@@ -31,12 +76,6 @@ class DebtorManagementService
         //         $auth = config('credentials.DEBTT_MONTHLY_PART');
         //     }
         // }
-
-        /** @var string $url */
-        $url = config('services.debtt.api_url');
-
-        /** @var string $authKey */
-        $authKey = config('services.debtt.api_key');
 
         // $request = Http::post($url, [
         //     'function' => 'createcase',
