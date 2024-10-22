@@ -11,12 +11,12 @@ return new class extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
 
-            $table->string('street_and_house_number');
+            $table->string('address_line');
 
             $table->string('street');
 
             $table->integer('house_number');
-            $table->char('house_number_addition');
+            $table->char('house_number_addition')->nullable();
 
             $table->string('zipcode');
 

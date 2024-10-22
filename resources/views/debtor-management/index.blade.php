@@ -82,16 +82,13 @@
                                                     </x-slot>
 
                                                     <x-slot name="content">
-                                                        <x-dropdown-link :href="route('debtor-management.store', $order)">
-
-                                                            <form method="POST"
-                                                                action="{{ route('debtor-management.store', $order) }}"
-                                                                class="inline">
-                                                                @csrf
-                                                                <button type="submit"
-                                                                    class="text-green-600 hover:text-green-900">Doorzetten
-                                                                    naar Debtt</button>
-                                                        </x-dropdown-link>
+                                                        <form method="POST"
+                                                            action="{{ route('debtor-management.store', ['id' => $order['id']]) }}"
+                                                            class="inline">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                class="text-green-600 hover:text-green-900">Doorzetten
+                                                                naar Debtt</button>
                                                     </x-slot>
                                                 </x-dropdown>
                                             </div>

@@ -11,7 +11,7 @@ class DebtorManagementService
     ) {
     }
 
-    // TOOD: Refactor
+    // TOOD: Refactor -> Param: Order $order
     public function handleIncollectibeInvoices(int $orderId)
     {
         /** @var string $url */
@@ -20,6 +20,7 @@ class DebtorManagementService
         /** @var string $authKey */
         $authKey = config('services.debtt.api_key');
 
+        // Get the order
         $order = $this->orderService->findOrder($orderId);
 
         if (empty($order->billing()->contact()->company())) {

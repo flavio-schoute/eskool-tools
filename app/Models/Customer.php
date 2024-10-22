@@ -11,6 +11,14 @@ class Customer extends Model
     /** @use HasFactory<\Database\Factories\CustomerFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'full_name',
+        'first_name',
+        'last_name',
+        'email',
+        'phone_number'
+    ];
+
     public function addresses(): BelongsToMany
     {
         return $this->belongsToMany(Address::class);

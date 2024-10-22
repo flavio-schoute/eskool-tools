@@ -1,5 +1,11 @@
 # eSkool Tools
 
+Idea:
+-> Action
+-> Call service
+
+--> Action -> Repository
+
 -- Brainstorm
 -> Customers table based on unique email
 
