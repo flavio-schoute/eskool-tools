@@ -8,7 +8,73 @@
 
     <div class="py-12">
 
-        <div class="max-w-full overflow-x-auto">
+        <table class="table-auto">
+            <th>
+                <tr class="bg-white">
+                    <th scope="col" class="py-3 px-4 uppercase text-sm tracking-wide">Factuur nummer</th>
+                    <th scope="col" class="py-3 px-4 uppercase text-sm tracking-wide">Factuur datum</th>
+                    <th scope="col" class="py-3 px-4 uppercase text-sm tracking-wide">Naam</th>
+                    <th scope="col" class="py-3 px-4 uppercase text-sm tracking-wide">Product</th>
+                    <th scope="col" class="py-3 px-4 uppercase text-sm tracking-wide">Bedrag</th>
+                    <th scope="col" class="py-3 px-4 uppercase text-sm tracking-wide">Actie's</th>
+                </tr>
+            </th>
+            <tbody class="divide-y">
+                @foreach ($orders as $order)
+                    <tr class="even:bg-white odd:bg-gray-50 hover:bg-gray-100">
+                        <td class="py-3 px-4 text-sm whitespace-nowrap">{{ $order['invoice_number'] }}</td>
+                        <td class="py-3 px-4 text-sm whitespace-nowrap">{{ $order['invoice_date'] }}</td>
+                        <td class="py-3 px-4 text-sm whitespace-nowrap">{{ $order['customer_full_name'] }}</td>
+                        <td class="py-3 px-4 text-sm whitespace-nowrap">{{ $order['product'] }}</td>
+
+                        <td class="py-3 px-4 text-sm whitespace-nowrap">
+                            {{ Number::currency($order['amount'], locale: config('app.locale')) }}
+                        </td>
+                        
+                        <td>
+                            <x-dropdown-action-table align="right" width="48">
+                                <x-slot name="trigger">
+                                    <button
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium transition ease-in-out duration-150">
+                                        <span>{{ __('Actions') }}</span>
+
+                                        <div class="ms-1">
+                                            <svg class="fill-current h-4 w-4"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </x-slot>
+
+                                <x-slot name="content">
+                                    <form 
+                                        method="POST"
+                                        action="{{ route('debtor-management.transfer-debtor-to-collection-agency', ['id' => $order['id']]) }}"
+                                        class="inline">
+
+                                        @csrf
+
+                                        <button type="submit">
+                                            Doorzetten naar Debtt
+                                        </button>
+                                    </form>
+                                </x-slot>
+                            </x-dropdown>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        
+        <div>
+            {{ $orders->links() }}
+        </div>
+            
+        {{-- <div class="max-w-full overflow-x-auto">
             <div class="inline-block min-w-full align-middle">
                 <div class="overflow-x-auto">
                     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,7 +108,6 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
-                                <?php $rowIndex = 0; ?>
                                 @foreach ($orders as $order)
                                     <tr class="{{ $rowIndex % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -95,7 +160,6 @@
 
                                         </td>
                                     </tr>
-                                    <?php $rowIndex++; ?>
                                 @endforeach
                             </tbody>
                         </table>
@@ -107,43 +171,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        {{-- <div class="overflow-x-auto">
-            <table class="table table-zebra">
-                <!-- head -->
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Job</th>
-                        <th>Favorite Color</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- row 1 -->
-                    <tr>
-                        <th>1</th>
-                        <td>Cy Ganderton</td>
-                        <td>Quality Control Specialist</td>
-                        <td>Blue</td>
-                    </tr>
-                    <!-- row 2 -->
-                    <tr">
-                        <th>2</th>
-                        <td>Hart Hagerty</td>
-                        <td>Desktop Support Technician</td>
-                        <td>Purple</td>
-                        </tr>
-                        <!-- row 3 -->
-                        <tr>
-                            <th>3</th>
-                            <td>Brice Swyre</td>
-                            <td>Tax Accountant</td>
-                            <td>Red</td>
-                        </tr>
-                </tbody>
-            </table>
         </div> --}}
+
 
         <!-- You can open the modal using ID.showModal() method -->
         {{-- <button class="btn" onclick="my_modal_3.showModal()">open modal</button>

@@ -25,7 +25,7 @@ RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Installeer PHP-extensies voor Laravel
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd intl
 
 # Maak een gebruiker en groep aan voor sail
 RUN groupadd --force -g 1000 eskapp \

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
 use PlugAndPay\Sdk\Entity\Item;
 use PlugAndPay\Sdk\Entity\Order;
 use PlugAndPay\Sdk\Enum\OrderIncludes;
@@ -77,7 +78,7 @@ class PlugAndPayOrderService
                 'id' => $order->id(),
                 'invoice_number' => $order->invoiceNumber(),
                 'invoice_status' => $order->invoiceStatus()->value,
-                'invoice_date' => $order->createdAt(),
+                'invoice_date' => Carbon::parse($order->createdAt(), 'Europe/Amsterdam')->format('d M. \'y H:i'),
                 'invoice_mode' => $order->mode()->value,
 
                 // Customer information

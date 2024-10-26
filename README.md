@@ -44,3 +44,9 @@ make lint
 ### Inspiration sidebar:
 
 > https://tailwindui.com/components/application-ui/application-shells/sidebar
+
+--
+Debtor management URL:
+
+-   Als je op een factuurnummer klikt -> HTML Dialog openen met de factuur gegeven
+    -> En link naar Mollie

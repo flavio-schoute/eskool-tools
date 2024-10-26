@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Customer\CreateCustomerAction;
+use App\Http\Requests\Order\ValidateOrderIdRequest;
 use App\Http\Requests\PaginationRequest;
-use App\Http\Requests\StoreDebtorManagementRequest;
 use App\Models\User;
 use App\Notifications\Slack\CustomerTransferedToIncassoMessage;
 use App\Services\AddressService;
@@ -64,9 +64,22 @@ class DebtorManagementController extends Controller
      * Step 3 -> Incasso
      */
 
-    // Rename to step1 or something else
-    public function store(StoreDebtorManagementRequest $request)
+    // Rename to step1 or something else --> Rename this function
+    public function TransferDebtorToCollectionAgency(ValidateOrderIdRequest $request)
     {
+        /**
+         * Validateer data -> Rquest moet veranderd worden - DONE
+         * Haal de data bij PP op - Done
+         * Zet in onze database - Done
+         * Customer - Done
+         * Address - Done
+         * Koppelen - Done
+         * Order koppelen met klant (deze in debiteurbeheer table)
+         * Doorzettnen naar Debtt
+         * Notificatie
+         * Niet meer weergeven in rij dat moet in index gecontroleer worden
+         */
+
         /** @var int $validatedDataId */
         $validatedDataId = $request->validated(['id']);
 
@@ -81,32 +94,32 @@ class DebtorManagementController extends Controller
             ]
         );
 
-        // $customer = $this->customerService->createCustomer([
-        //     'full_name' => $order->billing()->contact()->firstName() . ' ' . $order->billing()->contact()->lastName(),
-        //     'first_name' => $order->billing()->contact()->firstName(),
-        //     'last_name' => $order->billing()->contact()->lastName(),
-        //     'email' => $order->billing()->contact()->email(),
-        //     'phone_number' => $order->billing()->contact()->telephone(),
-        // ]);
+        $customer = $this->customerService->createCustomer([
+            'full_name' => $order->billing()->contact()->firstName() . ' ' . $order->billing()->contact()->lastName(),
+            'first_name' => $order->billing()->contact()->firstName(),
+            'last_name' => $order->billing()->contact()->lastName(),
+            'email' => $order->billing()->contact()->email(),
+            'phone_number' => $order->billing()->contact()->telephone(),
+        ]);
 
-        // $address = $this->addressService->createAddress([
-        //     'address_line' => $order->billing()->address()->street() . ' ' . $order->billing()->address()->houseNumber(),
-        //     'street' => $order->billing()->address()->street(),
-        //     'house_number' => $order->billing()->address()->houseNumber(),
-        //     'house_number_addition' => null, // TODO: Checken of er een toevoeging is
-        //     'zipcode' => $order->billing()->address()->zipcode(),
-        //     'city' => $order->billing()->address()->city(),
-        //     'country' => $order->billing()->address()->country()->value,
-        // ]);
+        $address = $this->addressService->createAddress([
+            'address_line' => $order->billing()->address()->street() . ' ' . $order->billing()->address()->houseNumber(),
+            'street' => $order->billing()->address()->street(),
+            'house_number' => $order->billing()->address()->houseNumber(),
+            'house_number_addition' => null, // TODO: Checken of er een toevoeging is
+            'zipcode' => $order->billing()->address()->zipcode(),
+            'city' => $order->billing()->address()->city(),
+            'country' => $order->billing()->address()->country()->value,
+        ]);
 
-        // $customer->addresses()->attach($address->id);
+        $customer->addresses()->attach($address->id);
 
         $user = User::query()->get()->where('id', '=', 1);
 
         Notification::send($user, new CustomerTransferedToIncassoMessage());
 
-
         // Call the service
+
         return redirect()->route('debtor-management.index');
     }
 }

@@ -25,19 +25,15 @@ class CustomerTransferedToIncassoMessage extends Notification implements ShouldQ
     public function toSlack(object $notifiable): SlackMessage
     {
         return (new SlackMessage)
-            ->text('One of your invoices has been paid!')
-            ->headerBlock('Invoice Paid')
+            ->headerBlock('Klant overgezet naar incasso')
             ->contextBlock(function (ContextBlock $block) {
-                $block->text('Customer #1234');
-            })
-            ->sectionBlock(function (SectionBlock $block) {
-                $block->text('An invoice has been paid.');
-                $block->field("*Invoice No:*\n1000")->markdown();
-                $block->field("*Invoice Recipient:*\ntaylor@laravel.com")->markdown();
+                $block->text('Factuur: [Duck Duck Go](https://duckduckgo.com)')->markdown();
             })
             ->dividerBlock()
             ->sectionBlock(function (SectionBlock $block) {
-                $block->text('Congratulations!');
+                $block->text('Klantgegevens:');
+                $block->field("*Volledige naam:*\ntodo")->markdown();
+                $block->field("*Nummer:*\ntodo")->markdown();
             });
     }
 }

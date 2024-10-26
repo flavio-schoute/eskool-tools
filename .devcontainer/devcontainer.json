@@ -16,7 +16,8 @@
 				"vscphp.vscode-php-debug",
 				"dbaeumer.vscode-eslint",
 				"ms-azuretools.vscode-docker",
-				"ms-vscode.makefile-tools"
+				"ms-vscode.makefile-tools",
+				"bradlc.vscode-tailwindcss"
 			],
 			"settings": {}
 		}

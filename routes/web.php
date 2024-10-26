@@ -16,6 +16,9 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::resource('sales-overview', SaleOverviewController::class)->only(['index', 'store', 'show']);
     Route::resource('debtor-management', DebtorManagementController::class)->only(['index', 'store', 'show']);
+
+    Route::post('/debtor-management', [DebtorManagementController::class, 'TransferDebtorToCollectionAgency'])
+        ->name('debtor-management.transfer-debtor-to-collection-agency');
 });
 
 Route::middleware('auth')->group(function () {
