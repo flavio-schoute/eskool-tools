@@ -10,19 +10,23 @@ return new class () extends Migration {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
 
-            $table->string('plug_and_play_order_id');
-
-            $table->string('invoice_number');
+            $table->string('plug_and_play_order_id')->unique();
+            $table->string('invoice_number')->unique();
 
             $table->dateTime('invoice_date');
 
             $table->string('full_name');
 
-            $table->string('products');
+            $table->text('products');
 
-            $table->double('price');
+            $table->decimal('amount');
+            $table->decimal('amount_with_tax');
+            $table->decimal('tax_amount');
 
-            $table->double('price_with_tax');
+            $table->string('contact_person')->nullable();
+
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('billing_address_id')->constrained('addresses')->cascadeOnDelete();
 
             $table->timestamps();
         });

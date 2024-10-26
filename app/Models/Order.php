@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
+    /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -15,7 +17,21 @@ class Order extends Model
         'invoice_date',
         'full_name',
         'products',
-        'price',
-        'price_with_tax',
+        'amount',
+        'amount_with_tax',
+        'tax_amount',
+        'contact_person',
+        'customer_id',
+        'billing_address_id',
     ];
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function billingAddress(): BelongsTo
+    {
+        return $this->belongsTo(Address::class, 'billing_address_id');
+    }
 }

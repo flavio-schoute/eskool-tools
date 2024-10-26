@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Address extends Model
 {
@@ -15,14 +16,18 @@ class Address extends Model
         'address_line',
         'street',
         'house_number',
-        'house_number_addition',
-        'zipcode',
+        'postal_code',
         'city',
-        'country'
+        'country',
     ];
 
     public function customers(): BelongsToMany
     {
         return $this->belongsToMany(Customer::class);
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'billing_address_id');
     }
 }

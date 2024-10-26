@@ -11,7 +11,6 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         // Maybe make this select or getAll
         return Customer::query()->get();
-
     }
 
     public function create(array $data): Customer

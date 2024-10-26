@@ -1,4 +1,6 @@
-php-lint: php-cs-fixer php-lint-cs php-lint-cs-fix php-lint-md php-lint-stan
+php-fix: php-cs-fixer
+
+php-lint: php-lint-cs php-lint-cs-fix php-lint-md php-lint-stan
 
 vendor: composer.json composer.lock
 	@composer install

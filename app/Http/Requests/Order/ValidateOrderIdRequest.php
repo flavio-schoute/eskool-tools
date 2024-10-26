@@ -15,14 +15,14 @@ class ValidateOrderIdRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'numeric', 'integer']
+            'id' => ['required', 'numeric', 'integer'],
         ];
     }
 
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'id' => (int) $this->id
+            'id' => (int) $this->id,
         ]);
     }
 }

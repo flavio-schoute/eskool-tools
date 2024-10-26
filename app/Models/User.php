@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Slack\SlackMessage;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable

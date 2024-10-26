@@ -9,7 +9,6 @@ use App\Models\ClaimedOrder;
 use App\Models\Order;
 use App\Services\PlugAndPayOrderService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PlugAndPay\Sdk\Director\BodyTo\BodyToOrder;
 use PlugAndPay\Sdk\Enum\InvoiceStatus;
@@ -52,7 +51,7 @@ class SaleOverviewController extends Controller
     public function store(ClaimOrderRequest $request)
     {
         $validatedData = $request->validated();
-        
+
         // Todo: Fix correct data and id
         $order = Order::query()->create([
             'plug_and_play_order_id' => '123',
@@ -61,13 +60,13 @@ class SaleOverviewController extends Controller
             'full_name' => $validatedData->full_name,
             'products' => $validatedData->product,
             'price' => $validatedData->amount_excluding_vat,
-            'price_with_tax' => $validatedData->amount
+            'price_with_tax' => $validatedData->amount,
         ]);
 
         ClaimedOrder::query()->create([
             'order_id' => $order->id,
             'user_id' => Auth::user()->id,
-            'status' => OrderStatus::CLAIMED
+            'status' => OrderStatus::CLAIMED,
         ]);
 
         session()->flash('message', 'Post successfully updated.');

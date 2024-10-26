@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Customer\CreateCustomerAction;
 use App\Http\Requests\Order\ValidateOrderIdRequest;
 use App\Http\Requests\PaginationRequest;
 use App\Models\User;
 use App\Notifications\Slack\CustomerTransferedToIncassoMessage;
 use App\Services\AddressService;
 use App\Services\CustomerService;
-use App\Services\DebtorManagementService;
 use App\Services\PlugAndPayOrderService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use PlugAndPay\Sdk\Director\BodyTo\BodyToOrder;
 use PlugAndPay\Sdk\Enum\InvoiceStatus;
@@ -58,10 +53,10 @@ class DebtorManagementController extends Controller
         ]);
     }
 
-    /** 
+    /**
      * Step 1 -> WA - SMS - Email - Op basis van gegevens die we uit PP halen
      * Step 2 -> WA - SMS - Email - Op basis van gegevens die we uit PP halen - (Waarschuwing naar incasso)
-     * Step 3 -> Incasso
+     * Step 3 -> Incasso.
      */
 
     // Rename to step1 or something else --> Rename this function
@@ -77,7 +72,7 @@ class DebtorManagementController extends Controller
          * Order koppelen met klant (deze in debiteurbeheer table)
          * Doorzettnen naar Debtt
          * Notificatie
-         * Niet meer weergeven in rij dat moet in index gecontroleer worden
+         * Niet meer weergeven in rij dat moet in index gecontroleer worden.
          */
 
         /** @var int $validatedDataId */
@@ -90,7 +85,7 @@ class DebtorManagementController extends Controller
                 OrderIncludes::BILLING,
                 OrderIncludes::ITEMS,
                 OrderIncludes::PAYMENT,
-                OrderIncludes::TAXES
+                OrderIncludes::TAXES,
             ]
         );
 
