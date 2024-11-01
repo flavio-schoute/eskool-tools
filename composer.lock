@@ -767,16 +767,16 @@
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "2.0.3",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "6ea8dd08867a2a42619d65c3deb2c0fcbf81c8f8"
+                "reference": "f9c436286ab2892c7db7be8c8da4ef61ccf7b455"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/6ea8dd08867a2a42619d65c3deb2c0fcbf81c8f8",
-                "reference": "6ea8dd08867a2a42619d65c3deb2c0fcbf81c8f8",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/f9c436286ab2892c7db7be8c8da4ef61ccf7b455",
+                "reference": "f9c436286ab2892c7db7be8c8da4ef61ccf7b455",
                 "shasum": ""
             },
             "require": {
@@ -830,7 +830,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.0.3"
+                "source": "https://github.com/guzzle/promises/tree/2.0.4"
             },
             "funding": [
                 {
@@ -846,7 +846,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-07-18T10:29:17+00:00"
+            "time": "2024-10-17T10:06:22+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -2540,16 +2540,16 @@
         },
         {
             "name": "plug-and-pay/sdk-php",
-            "version": "1.2.0",
+            "version": "1.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plug-and-pay/sdk-php.git",
-                "reference": "a8031f0669bd263231fa5e0238bddd814ed09266"
+                "reference": "d65d84a91eacb34a124826f158cc2e06b24fd9a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/plug-and-pay/sdk-php/zipball/a8031f0669bd263231fa5e0238bddd814ed09266",
-                "reference": "a8031f0669bd263231fa5e0238bddd814ed09266",
+                "url": "https://api.github.com/repos/plug-and-pay/sdk-php/zipball/d65d84a91eacb34a124826f158cc2e06b24fd9a5",
+                "reference": "d65d84a91eacb34a124826f158cc2e06b24fd9a5",
                 "shasum": ""
             },
             "require": {
@@ -2583,9 +2583,9 @@
             ],
             "support": {
                 "issues": "https://github.com/plug-and-pay/sdk-php/issues",
-                "source": "https://github.com/plug-and-pay/sdk-php/tree/1.2.0"
+                "source": "https://github.com/plug-and-pay/sdk-php/tree/1.2.7"
             },
-            "time": "2024-09-25T08:00:43+00:00"
+            "time": "2024-10-30T13:03:59+00:00"
         },
         {
             "name": "psr/clock",
@@ -10397,12 +10397,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }
