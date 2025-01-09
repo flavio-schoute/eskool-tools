@@ -1,5 +1,9 @@
 # eSkool Tools
 
+Todo:
+
+-   Own directory for docker in .dev folder instead of php/docker for better readability
+
 Idea:
 -> Action
 -> Call service
@@ -50,3 +54,7 @@ Debtor management URL:
 
 -   Als je op een factuurnummer klikt -> HTML Dialog openen met de factuur gegeven
     -> En link naar Mollie
+
+==
+
+Later als debteur tabel word bijgewerkt ook order status bij werken

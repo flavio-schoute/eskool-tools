@@ -51,17 +51,17 @@
                                 </x-slot>
 
                                 <x-slot name="content">
-                                    <form 
-                                        method="POST"
-                                        action="{{ route('debtor-management.transfer-debtor-to-collection-agency', ['id' => $order['id']]) }}"
-                                        class="inline">
+                                    @foreach ($statuses as $status)
+                                        <form 
+                                            method="POST"
+                                            action="{{ route('debtor-management.transfer-debtor-to-collection-agency', ['id' => $order['id']]) }}"
+                                            class="inline">
 
-                                        @csrf
+                                            @csrf
 
-                                        <button type="submit">
-                                            Doorzetten naar Debtt
-                                        </button>
-                                    </form>
+                                            <button class="py-1" type="submit">{{ trim($status->value) }}</button>
+                                        </form>
+                                    @endforeach
                                 </x-slot>
                             </x-dropdown>
                         </td>

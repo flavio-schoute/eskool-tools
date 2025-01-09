@@ -15,6 +15,9 @@ return new class () extends Migration {
 
             $table->dateTime('invoice_date');
 
+            // Todo: Velden afdwingen
+            $table->string('invoice_status');
+
             $table->string('full_name');
 
             $table->text('products');

@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Address\CreateAddressAction;
+use App\Actions\Customer\CreateCustomerAction;
+use App\Actions\Debtor\CreateDebtorAction;
+use App\Actions\Order\CreateOrderAction;
+use App\Enums\Debtor\DebtorStatus;
 use App\Http\Requests\Order\ValidateOrderIdRequest;
 use App\Http\Requests\PaginationRequest;
 use App\Models\User;
@@ -9,9 +14,11 @@ use App\Notifications\Slack\CustomerTransferedToIncassoMessage;
 use App\Services\AddressService;
 use App\Services\CustomerService;
 use App\Services\PlugAndPayOrderService;
+use App\Traits\Order\RetrieveUniqueProductLabels;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Notification;
 use PlugAndPay\Sdk\Director\BodyTo\BodyToOrder;
+use PlugAndPay\Sdk\Entity\Order;
 use PlugAndPay\Sdk\Enum\InvoiceStatus;
 use PlugAndPay\Sdk\Enum\Mode;
 use PlugAndPay\Sdk\Enum\OrderIncludes;
@@ -19,10 +26,14 @@ use PlugAndPay\Sdk\Enum\PaymentStatus;
 
 class DebtorManagementController extends Controller
 {
+    use RetrieveUniqueProductLabels;
+
     public function __construct(
         private readonly PlugAndPayOrderService $orderService,
-        private readonly CustomerService $customerService,
-        private readonly AddressService $addressService
+        private readonly CreateCustomerAction $createCustomerAction,
+        private readonly CreateAddressAction $createAddressAction,
+        private readonly CreateOrderAction $createOrderAction,
+        private readonly CreateDebtorAction $createDebtorAction,
     ) {
     }
 
@@ -50,6 +61,26 @@ class DebtorManagementController extends Controller
 
         return view('debtor-management.index', [
             'orders' => $paginatedOrders,
+            'statuses' => DebtorStatus::cases(),
+        ]);
+    }
+
+    // Todo: Add return and move method to an other location maybe
+    public function sendFirstReminder(ValidateOrderIdRequest $request)
+    {
+        /** @var int $validatedDataId */
+        $validatedDataId = $request->validated(['id']);
+
+        $order = $this->findOrderById($validatedDataId);
+
+        $order = $this->createOrderAction->execute(
+            attributes: $this->mapOrderData($order)
+        );
+
+        $this->createDebtorAction->execute([
+            'customer_id' => $order->customer()->get('id')->id,
+            'order_id' => $order->id,
+            'status' => DebtorStatus::FIRST_REMINDER,
         ]);
     }
 
@@ -60,7 +91,7 @@ class DebtorManagementController extends Controller
      */
 
     // Rename to step1 or something else --> Rename this function
-    public function TransferDebtorToCollectionAgency(ValidateOrderIdRequest $request)
+    public function transferDebtorToCollectionAgency(ValidateOrderIdRequest $request)
     {
         /**
          * Validateer data -> Rquest moet veranderd worden - DONE
@@ -78,9 +109,81 @@ class DebtorManagementController extends Controller
         /** @var int $validatedDataId */
         $validatedDataId = $request->validated(['id']);
 
-        // Get the data from the Plug & Pay API
-        $order = $this->orderService->findOrder(
-            id: $validatedDataId,
+        // $customer = $this->customerService->createCustomer([
+        //     'full_name' => $order->billing()->contact()->firstName() . ' ' . $order->billing()->contact()->lastName(),
+        //     'first_name' => $order->billing()->contact()->firstName(),
+        //     'last_name' => $order->billing()->contact()->lastName(),
+        //     'email' => $order->billing()->contact()->email(),
+        //     'phone_number' => $order->billing()->contact()->telephone(),
+        // ]);
+
+        // $address = $this->addressService->createAddress([
+        //     'address_line' => $order->billing()->address()->street() . ' ' . $order->billing()->address()->houseNumber(),
+        //     'street' => $order->billing()->address()->street(),
+        //     'house_number' => $order->billing()->address()->houseNumber(),
+        //     'house_number_addition' => null, // TODO: Checken of er een toevoeging is
+        //     'zipcode' => $order->billing()->address()->zipcode(),
+        //     'city' => $order->billing()->address()->city(),
+        //     'country' => $order->billing()->address()->country()->value,
+        // ]);
+
+        // $customer->addresses()->attach($address->id);
+
+        // $user = User::query()->get()->where('id', '=', 1);
+
+        // Notification::send($user, new CustomerTransferedToIncassoMessage());
+
+        // // Call the service
+
+        return redirect()->route('debtor-management.index');
+    }
+
+    // Todo specifx array
+    private function mapOrderData(Order $order): array
+    {
+        $customerFirstName = $order->billing()->contact()->firstName();
+        $customerLastName = $order->billing()->contact()->lastName();
+        $customerFullName = $customerFirstName . ' ' . $customerLastName;
+
+        $customerStreet = $order->billing()->address()->street();
+        $customerHouseNumber = $order->billing()->address()->houseNumber();
+
+        $products = $this->getUniqueProductLabels($order)->implode(', ');
+
+        return [
+            // Customer data
+            'full_name' => $customerFullName,
+            'first_name' => $customerFirstName,
+            'last_name' => $customerLastName,
+            'email' => $order->billing()->contact()->email(),
+            'phone_number' => $order->billing()->contact()->telephone(),
+
+            // Address data
+            'address_line' => $customerStreet . ' ' . $customerHouseNumber,
+            'street' => $customerStreet,
+            'house_number' => $customerHouseNumber,
+            'postal_code' => $order->billing()->address()->zipcode(),
+            'city' => $order->billing()->address()->city(),
+            'country' => $order->billing()->address()->country()->value,
+
+            // Order data
+            'plug_and_play_order_id' => $order->id(),
+            'invoice_number' => $order->invoiceNumber(),
+            'invoice_date' => $order->createdAt(),
+            'full_name' => $customerFullName,
+            'products' => $products,
+            'amount' => $order->amount(),
+            'amount_with_tax' => $order->amountWithTax(),
+            'tax_amount' => $order->taxes()['amount'],
+            'contact_person' => null, // Todo: Fix later (currently no option to get contact person from the SDK)
+        ];
+    }
+
+    // Todo: Maybde move this function to a other location
+    private function findOrderById(int $id): Order
+    {
+        return $this->orderService->findOrder(
+            id: $id,
             includes: [
                 OrderIncludes::BILLING,
                 OrderIncludes::ITEMS,
@@ -88,33 +191,5 @@ class DebtorManagementController extends Controller
                 OrderIncludes::TAXES,
             ]
         );
-
-        $customer = $this->customerService->createCustomer([
-            'full_name' => $order->billing()->contact()->firstName() . ' ' . $order->billing()->contact()->lastName(),
-            'first_name' => $order->billing()->contact()->firstName(),
-            'last_name' => $order->billing()->contact()->lastName(),
-            'email' => $order->billing()->contact()->email(),
-            'phone_number' => $order->billing()->contact()->telephone(),
-        ]);
-
-        $address = $this->addressService->createAddress([
-            'address_line' => $order->billing()->address()->street() . ' ' . $order->billing()->address()->houseNumber(),
-            'street' => $order->billing()->address()->street(),
-            'house_number' => $order->billing()->address()->houseNumber(),
-            'house_number_addition' => null, // TODO: Checken of er een toevoeging is
-            'zipcode' => $order->billing()->address()->zipcode(),
-            'city' => $order->billing()->address()->city(),
-            'country' => $order->billing()->address()->country()->value,
-        ]);
-
-        $customer->addresses()->attach($address->id);
-
-        $user = User::query()->get()->where('id', '=', 1);
-
-        Notification::send($user, new CustomerTransferedToIncassoMessage());
-
-        // Call the service
-
-        return redirect()->route('debtor-management.index');
     }
 }

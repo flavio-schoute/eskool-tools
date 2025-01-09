@@ -29,4 +29,9 @@ class Customer extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function debtors(): HasMany
+    {
+        return $this->hasMany(Debtor::class);
+    }
 }

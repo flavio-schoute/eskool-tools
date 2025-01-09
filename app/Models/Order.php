@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -15,6 +16,7 @@ class Order extends Model
         'plug_and_play_order_id',
         'invoice_number',
         'invoice_date',
+        'invoice_status',
         'full_name',
         'products',
         'amount',
@@ -33,5 +35,10 @@ class Order extends Model
     public function billingAddress(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'billing_address_id');
+    }
+
+    public function debtors(): HasOne
+    {
+        return $this->HasOne(Debtor::class);
     }
 }

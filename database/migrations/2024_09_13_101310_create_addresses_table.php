@@ -20,6 +20,8 @@ return new class () extends Migration {
 
             $table->string('country');
 
+            $table->unique(['street', 'house_number', 'postal_code', 'city'], 'unique_address');
+
             $table->timestamps();
         });
     }
