@@ -2,7 +2,7 @@ services:
     php:
         build:
             context: .
-            dockerfile: .dev/php/docker/Dockerfile
+            dockerfile: .dev/docker/Dockerfile
         container_name: php
         environment:
             - XDEBUG_MODE=${SAIL_XDEBUG_MODE:-off}
@@ -12,7 +12,7 @@ services:
             - 5173:5173
         volumes:
             - .:/var/www/html
-            - .dev/php/docker/settings/php.ini:/usr/local/etc/php/php.ini
+            - .dev/docker/settings/php.ini:/usr/local/etc/php/php.ini
         networks:
             - application
         depends_on:
@@ -33,7 +33,7 @@ services:
         networks:
             - application
         healthcheck:
-            test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
             interval: 30s
             timeout: 10s
             retries: 3
@@ -51,7 +51,6 @@ services:
 
 networks:
     application:
-
 
 volumes:
     mysql:
