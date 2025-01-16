@@ -1,13 +1,8 @@
 includes:
     - ../../vendor/larastan/larastan/extension.neon
-    - ../../vendor/nesbot/carbon/extension.neon
 
 parameters:
     level: max
-    ignoreErrors:
-        - '#Class .* uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types: TFactory#'
-        - '#Method .* return type with generic class .* does not specify its types: .*#'
-        - '#Parameter \#1 \$callback of method Illuminate\\Support\\Collection<\(int\|string\),PlugAndPay\\Sdk\\Entity\\AbstractEntity>::map\(\) expects callable\(PlugAndPay\\Sdk\\Entity\\AbstractEntity, int\|string\): array\{id: int, invoice_number: string\|null, invoice_date: DateTimeImmutable, full_name: string, product: string, amount_excluding_vat: float\}, Closure\(PlugAndPay\\Sdk\\Entity\\Order\): array\{id: int, invoice_number: string\|null, invoice_date: DateTimeImmutable, full_name: non-falsy-string, product: string, amount_excluding_vat: float\} given.#'
 
     paths:
-        - ../../app/Traits/Order/RetrieveUniqueProductLabels.php
+        - ../../app

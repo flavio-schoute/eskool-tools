@@ -14,6 +14,11 @@ class ValidateOrderIdRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, array<int, string>>
+     */
     public function rules(): array
     {
         return [
@@ -24,7 +29,7 @@ class ValidateOrderIdRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'id' => (int) $this->id,
+            'id' => (int) $this->request->get('id'),
         ]);
     }
 }

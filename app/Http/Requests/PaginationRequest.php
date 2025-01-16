@@ -14,6 +14,11 @@ class PaginationRequest extends FormRequest
         return Auth::check();
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, array<int, string>>
+     */
     public function rules(): array
     {
         return [
@@ -23,7 +28,6 @@ class PaginationRequest extends FormRequest
 
     public function getPage(): int
     {
-        /** @return int */
-        return $this->get('page', 1);
+        return (int) $this->request->get('page', 1);
     }
 }

@@ -24,7 +24,7 @@ class SaleOverviewController extends Controller
     ) {
     }
 
-    public function index(PaginationRequest $request)
+    public function index(PaginationRequest $request): View
     {
         $filters = [
             'mode' => Mode::LIVE,
@@ -36,12 +36,14 @@ class SaleOverviewController extends Controller
         $response = $this->orderService->getOrders($filters, $request->getPage());
 
         $orders = $this->orderService->mapOrdersToArray(
-            orders: BodyToOrder::buildMulti($response[0]['data'])
+            orders: BodyToOrder::buildMulti(
+                type($response['data'])->asArray()
+            )
         );
 
         $paginatedOrders = $this->orderService->paginateOrders(
             orders: $orders,
-            meta: $response[0]['meta'],
+            meta: $response['meta'],
             path: '/sales-overview'
         );
 
@@ -50,31 +52,31 @@ class SaleOverviewController extends Controller
         ]);
     }
 
-    public function store(ClaimOrderRequest $request)
-    {
-        $validatedData = $request->validated();
+    // public function store(ClaimOrderRequest $request)
+    // {
+    //     $validatedData = $request->validated();
 
-        // Todo: Fix correct data and id
-        $order = Order::query()->create([
-            'plug_and_play_order_id' => '123',
-            'invoice_number' => $validatedData->invoice_number,
-            'invoice_date' => '01-01-2024',
-            'full_name' => $validatedData->full_name,
-            'products' => $validatedData->product,
-            'price' => $validatedData->amount_excluding_vat,
-            'price_with_tax' => $validatedData->amount,
-        ]);
+    //     // Todo: Fix correct data and id
+    //     $order = Order::query()->create([
+    //         'plug_and_play_order_id' => '123',
+    //         'invoice_number' => $validatedData->invoice_number,
+    //         'invoice_date' => '01-01-2024',
+    //         'full_name' => $validatedData->full_name,
+    //         'products' => $validatedData->product,
+    //         'price' => $validatedData->amount_excluding_vat,
+    //         'price_with_tax' => $validatedData->amount,
+    //     ]);
 
-        ClaimedOrder::query()->create([
-            'order_id' => $order->id,
-            'user_id' => Auth::user()->id,
-            'status' => OrderStatus::CLAIMED,
-        ]);
+    //     ClaimedOrder::query()->create([
+    //         'order_id' => $order->id,
+    //         'user_id' => Auth::user()->id,
+    //         'status' => OrderStatus::CLAIMED,
+    //     ]);
 
-        session()->flash('message', 'Post successfully updated.');
+    //     session()->flash('message', 'Post successfully updated.');
 
-        return redirect()->route('sales-overview.index')->with('success', 'Order claimed!');
-    }
+    //     return redirect()->route('sales-overview.index')->with('success', 'Order claimed!');
+    // }
 
     // public function show(int $id): View
     // {

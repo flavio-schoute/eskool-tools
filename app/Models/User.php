@@ -12,18 +12,20 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property int $id
+ */
 class User extends Authenticatable
 {
+    /** @use HasFactory<UserFactory> */
     use HasFactory;
     use Notifiable;
     use HasRoles;
 
-    protected static string $factory = UserFactory::class;
-
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -34,7 +36,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',
@@ -54,6 +56,11 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Get the user's claimed orders.
+     *
+     * @return HasMany<ClaimedOrder, covariant $this>
+     */
     public function claimedOrders(): HasMany
     {
         return $this->hasMany(ClaimedOrder::class);

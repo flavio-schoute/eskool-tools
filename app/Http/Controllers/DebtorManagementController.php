@@ -68,23 +68,23 @@ class DebtorManagementController extends Controller
     }
 
     // Todo: Add return and move method to an other location maybe
-    public function sendFirstReminder(ValidateOrderIdRequest $request): void
-    {
-        /** @var int $validatedDataId */
-        $validatedDataId = $request->validated(['id']);
+    // public function sendFirstReminder(ValidateOrderIdRequest $request): void
+    // {
+    //     /** @var int $validatedDataId */
+    //     $validatedDataId = $request->validated(['id']);
 
-        $order = $this->findOrderById($validatedDataId);
+    //     $order = $this->findOrderById($validatedDataId);
 
-        $order = $this->createOrderAction->execute(
-            attributes: $this->mapOrderData($order)
-        );
+    //     $order = $this->createOrderAction->execute(
+    //         attributes: $this->mapOrderData($order)
+    //     );
 
-        $this->createDebtorAction->execute([
-            'customer_id' => $order->customer()->get('id')->id,
-            'order_id' => $order->id,
-            'status' => DebtorStatus::FIRST_REMINDER,
-        ]);
-    }
+    //     $this->createDebtorAction->execute([
+    //         'customer_id' => $order->customer()->get('id')->id,
+    //         'order_id' => $order->id,
+    //         'status' => DebtorStatus::FIRST_REMINDER,
+    //     ]);
+    // }
 
     /**
      * Step 1 -> WA - SMS - Email - Op basis van gegevens die we uit PP halen
@@ -141,55 +141,55 @@ class DebtorManagementController extends Controller
     }
 
     // Todo specifx array
-    private function mapOrderData(Order $order): array
-    {
-        $customerFirstName = $order->billing()->contact()->firstName();
-        $customerLastName = $order->billing()->contact()->lastName();
-        $customerFullName = $customerFirstName . ' ' . $customerLastName;
+    // private function mapOrderData(Order $order): array
+    // {
+    //     $customerFirstName = $order->billing()->contact()->firstName();
+    //     $customerLastName = $order->billing()->contact()->lastName();
+    //     $customerFullName = $customerFirstName . ' ' . $customerLastName;
 
-        $customerStreet = $order->billing()->address()->street();
-        $customerHouseNumber = $order->billing()->address()->houseNumber();
+    //     $customerStreet = $order->billing()->address()->street();
+    //     $customerHouseNumber = $order->billing()->address()->houseNumber();
 
-        $products = $this->getUniqueProductLabels($order)->implode(', ');
+    //     $products = $this->getUniqueProductLabels($order)->implode(', ');
 
-        return [
-            'first_name' => $customerFirstName,
-            'last_name' => $customerLastName,
-            'email' => $order->billing()->contact()->email(),
-            'phone_number' => $order->billing()->contact()->telephone(),
+    //     return [
+    //         'first_name' => $customerFirstName,
+    //         'last_name' => $customerLastName,
+    //         'email' => $order->billing()->contact()->email(),
+    //         'phone_number' => $order->billing()->contact()->telephone(),
 
-            // Address data
-            'address_line' => $customerStreet . ' ' . $customerHouseNumber,
-            'street' => $customerStreet,
-            'house_number' => $customerHouseNumber,
-            'postal_code' => $order->billing()->address()->zipcode(),
-            'city' => $order->billing()->address()->city(),
-            'country' => $order->billing()->address()->country()->value,
+    //         // Address data
+    //         'address_line' => $customerStreet . ' ' . $customerHouseNumber,
+    //         'street' => $customerStreet,
+    //         'house_number' => $customerHouseNumber,
+    //         'postal_code' => $order->billing()->address()->zipcode(),
+    //         'city' => $order->billing()->address()->city(),
+    //         'country' => $order->billing()->address()->country()->value,
 
-            // Order data
-            'plug_and_play_order_id' => $order->id(),
-            'invoice_number' => $order->invoiceNumber(),
-            'invoice_date' => $order->createdAt(),
-            'full_name' => $customerFullName,
-            'products' => $products,
-            'amount' => $order->amount(),
-            'amount_with_tax' => $order->amountWithTax(),
-            'tax_amount' => $order->taxes()['amount'],
-            'contact_person' => null, // Todo: Fix later (currently no option to get contact person from the SDK)
-        ];
-    }
+    //         // Order data
+    //         'plug_and_play_order_id' => $order->id(),
+    //         'invoice_number' => $order->invoiceNumber(),
+    //         'invoice_date' => $order->createdAt(),
+    //         'full_name' => $customerFullName,
+    //         'products' => $products,
+    //         'amount' => $order->amount(),
+    //         'amount_with_tax' => $order->amountWithTax(),
+    //         'tax_amount' => $order->taxes()['amount'],
+    //         'contact_person' => null, // Todo: Fix later (currently no option to get contact person from the SDK)
+    //     ];
+    // }
 
     // Todo: Maybde move this function to a other location
-    private function findOrderById(int $id): Order
-    {
-        return $this->orderService->findOrder(
-            id: $id,
-            includes: [
-                OrderIncludes::BILLING,
-                OrderIncludes::ITEMS,
-                OrderIncludes::PAYMENT,
-                OrderIncludes::TAXES,
-            ]
-        );
-    }
+    // private function findOrderById(int $id): Order
+    // {
+    //     return $this->orderService->findOrder(
+    //         id: $id,
+    //         includes: [
+    //             OrderIncludes::BILLING,
+    //             OrderIncludes::ITEMS,
+    //             OrderIncludes::PAYMENT,
+    //             OrderIncludes::TAXES,
+    //         ]
+    //     );
+    // }
 }

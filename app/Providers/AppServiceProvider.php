@@ -5,11 +5,6 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Models\User;
-use App\Repositories\AddressRepository;
-use App\Repositories\CustomerRepository;
-use App\Repositories\Interfaces\AddressRepositoryInterface;
-use App\Repositories\Interfaces\CustomerRepositoryInterface;
-use App\Services\CustomerService;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
@@ -22,18 +17,17 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * Register any application services.
+     */
     public function register(): void
     {
         Gate::after(fn (User $user): bool => $user->hasRole('Super Admin'));
-
-        $this->app->bind(CustomerRepositoryInterface::class, CustomerRepository::class);
-        $this->app->bind(AddressRepositoryInterface::class, AddressRepository::class);
-
-        // $this->app->bind(CustomerService::class, function ($app) {
-        //     return new UserService($app->make(UserRepositoryInterface::class));
-        // });
     }
 
+    /**
+     * Bootstrap any application services.
+     */
     public function boot(): void
     {
         $this->configureCommands();

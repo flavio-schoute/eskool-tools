@@ -16,7 +16,7 @@ use PlugAndPay\Sdk\Support\Parameters;
 
 class PlugAndPayOrderService extends OrderService
 {
-    /** @var string[] */
+    /** @var OrderIncludes[] */
     public array $includes = [];
 
     public function __construct(
@@ -61,9 +61,7 @@ class PlugAndPayOrderService extends OrderService
 
         $response =  $this->client->get("/v2/orders$query");
 
-        return [
-            $response->body(),
-        ];
+        return $response->body();
     }
 
     public function mapOrdersToArray(array $orders): array
@@ -122,7 +120,8 @@ class PlugAndPayOrderService extends OrderService
         })->toArray();
     }
 
-    public function paginateOrders(mixed $orders, array $meta, string $path = ''): LengthAwarePaginator
+    // @phpstan-ignore missingType.generics
+    public function paginateOrders(array $orders, array $meta, string $path = ''): LengthAwarePaginator
     {
         return new LengthAwarePaginator(
             $orders,
@@ -133,6 +132,10 @@ class PlugAndPayOrderService extends OrderService
         );
     }
 
+    /**
+     * @template TValue
+     * @param array<string, TValue> $filters
+     */
     private function buildOrderFilter(array $filters, int $page): OrderFilter
     {
         $orderFilter = (new OrderFilter())->page($page);
