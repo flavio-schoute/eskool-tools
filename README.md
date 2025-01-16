@@ -1,39 +1,38 @@
 # eSkool Tools
 
-Todo:
+## Roles & permissions
 
--   Own directory for docker in .dev folder instead of php/docker for better readability
+There will be several roles in this project all with there own unique permissions.
 
-Idea:
--> Action
--> Call service
-
---> Action -> Repository
-
--- Brainstorm
--> Customers table based on unique email
-
-    -> Start workflow
-
-## Roles
+### Roles:
 
 -   Admin
+-   Manager
 -   Closer
 -   Setter
 
-## Permissions
+### Permissions by role:
 
--   Admin
-    -   All Permissions but with some extra
-        -   Change comission
-        -   Remove closer/ setter or disable account
--   Closer
-    -   Claim order
-    -   View order
-    -   Commission breakdown
-    -   Comission export
--   Setter
-    -   Same permissions as closer
+#### Admin:
+
+The admin will have all the permissions but with some extra. Extra permissions included will be:
+
+-   Change comissions on people's accounts
+-   Modify people's sheet
+
+#### Manager:
+
+The manager will have all the permissions that a closer or a setter has but with some extra permissions like:
+
+-   Remove a closer/ setter or disable an account
+
+### Closer & setter:
+
+The closer and the setter will have the same permissions. There are the permissons for a closer or a setter:
+
+-   Claim and view an order
+-   Get a commission overview
+-   Generate an export from the commission overview
 
 ## Commands:
 
@@ -45,16 +44,6 @@ make fix
 make lint
 ```
 
-### Inspiration sidebar:
-
-> https://tailwindui.com/components/application-ui/application-shells/sidebar
-
---
-Debtor management URL:
-
--   Als je op een factuurnummer klikt -> HTML Dialog openen met de factuur gegeven
-    -> En link naar Mollie
-
-==
-
-Later als debteur tabel word bijgewerkt ook order status bij werken
+```bash
+./vendor/bin/rector
+```
