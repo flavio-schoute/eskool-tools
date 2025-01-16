@@ -48,16 +48,15 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
-                                <?php $rowIndex = 0; ?>
-                                @foreach ($orders as $order)
-                                    <tr class="{{ $rowIndex % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
+                                @foreach ($orders as $key => $order)
+                                    <tr class="{{ $key % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             <button
                                                 onclick="Livewire.dispatch('openModal', { component: 'view-invoice', arguments: { orderId: {{ $order['id'] }} }})"
                                                 class="hover:text-blue-500 hover:underline">{{ $order['invoice_number'] }}</button>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            {{ $order['invoice_date']->format('Y-m-d H:i:s') }}
+                                            {{ $order['invoice_date'] }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             {{ $order['customer_full_name'] }}
@@ -77,7 +76,6 @@
                                             </form>
                                         </td>
                                     </tr>
-                                    <?php $rowIndex++; ?>
                                 @endforeach
                             </tbody>
                         </table>

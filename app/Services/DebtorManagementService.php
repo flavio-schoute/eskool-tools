@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
@@ -12,7 +14,7 @@ class DebtorManagementService
     }
 
     // TOOD: Refactor -> Param: Order $order
-    public function handleIncollectibeInvoices(int $orderId)
+    public function handleIncollectibeInvoices(int $orderId): void
     {
         /** @var string $url */
         $url = config('services.debtt.api_url');
@@ -23,13 +25,9 @@ class DebtorManagementService
         // Get the order
         $order = $this->orderService->findOrder($orderId);
 
-        if (empty($order->billing()->contact()->company())) {
-            $debtorType = 'particulier';
-        } else {
-            $debtorType = 'zakelijk';
-        }
+        $debtorType = empty($order->billing()->contact()->company()) ? 'particulier' : 'zakelijk';
 
-        $request = Http::post($url, [
+        Http::post($url, [
             'function' => 'createcase',
             'auth' => $authKey,
             'debiteur' => [

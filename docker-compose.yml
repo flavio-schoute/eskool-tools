@@ -2,7 +2,7 @@ services:
     php:
         build:
             context: .
-            dockerfile: .dev/docker/Dockerfile
+            dockerfile: .dev/docker/php/Dockerfile
         container_name: php
         environment:
             - XDEBUG_MODE=${SAIL_XDEBUG_MODE:-off}
@@ -12,7 +12,7 @@ services:
             - 5173:5173
         volumes:
             - .:/var/www/html
-            - .dev/docker/settings/php.ini:/usr/local/etc/php/php.ini
+            - .dev/docker/php/settings/php.ini:/usr/local/etc/php/php.ini
         networks:
             - application
         depends_on:

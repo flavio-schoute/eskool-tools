@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -8,25 +10,36 @@ use PlugAndPay\Sdk\Entity\Item;
 use PlugAndPay\Sdk\Entity\Order;
 use PlugAndPay\Sdk\Enum\OrderIncludes;
 use PlugAndPay\Sdk\Filters\OrderFilter;
+use PlugAndPay\Sdk\Service\Client;
 use PlugAndPay\Sdk\Service\OrderService;
+use PlugAndPay\Sdk\Support\Parameters;
 
-class PlugAndPayOrderService
+class PlugAndPayOrderService extends OrderService
 {
+    /** @var string[] */
+    public array $includes = [];
+
     public function __construct(
-        private OrderService $orderService
+        private readonly Client $client
     ) {
+        parent::__construct($client);
+    }
+
+    public function include(OrderIncludes ...$includes): self
+    {
+        $this->includes = $includes;
+
+        return $this;
     }
 
     public function getOrders(array $filters = [], int $page = 1, array $includes = []): array
     {
         $orderFilter = $this->buildOrderFilter($filters, $page);
 
-        $orderService = $this->orderService->withPagination();
-
-        if (!empty($includes)) {
-            $orderService->include(...$includes);
+        if ($includes !== []) {
+            $this->include(...$includes);
         } else {
-            $orderService->include(
+            $this->include(
                 OrderIncludes::BILLING,
                 OrderIncludes::ITEMS,
                 OrderIncludes::PAYMENT,
@@ -34,27 +47,23 @@ class PlugAndPayOrderService
             );
         }
 
-        return $orderService->get($orderFilter);
+        return $this->get($orderFilter);
     }
 
-    public function findOrder(int $id, array $includes = []): Order
+    public function get(?OrderFilter $orderFilter = null): array
     {
-        $orderService = $this->orderService;
-
-        if (!empty($included)) {
-            $orderService->include(...$includes);
-        } else {
-            $orderService->include(
-                OrderIncludes::BILLING,
-                OrderIncludes::COMMENTS,
-                OrderIncludes::DISCOUNTS,
-                OrderIncludes::ITEMS,
-                OrderIncludes::PAYMENT,
-                OrderIncludes::TAXES
-            );
+        $parameters = $orderFilter instanceof \PlugAndPay\Sdk\Filters\OrderFilter ? $orderFilter->parameters() : [];
+        if ($this->includes !== []) {
+            $parameters['include'] = $this->includes;
         }
 
-        return $orderService->find($id);
+        $query = Parameters::toString($parameters);
+
+        $response =  $this->client->get("/v2/orders$query");
+
+        return [
+            $response->body(),
+        ];
     }
 
     public function mapOrdersToArray(array $orders): array
@@ -63,9 +72,7 @@ class PlugAndPayOrderService
             $customer = $order->billing()->contact();
             $fullName = $customer->firstName() . ' ' . $customer->lastName();
 
-            $productLabels = collect($order->items())->flatMap(function (Item $item): array {
-                return [$item->label()];
-            })->unique()->values();
+            $productLabels = collect($order->items())->flatMap(fn (Item $item): array => [$item->label()])->unique()->values();
 
             $address = $order->billing()->address();
             $street = $address->street();
@@ -128,8 +135,7 @@ class PlugAndPayOrderService
 
     private function buildOrderFilter(array $filters, int $page): OrderFilter
     {
-        $orderFilter = new OrderFilter();
-        $orderFilter->page($page);
+        $orderFilter = (new OrderFilter())->page($page);
 
         foreach ($filters as $method => $value) {
             if (method_exists($orderFilter, $method)) {

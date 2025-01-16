@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Enums\OrderStatus;
@@ -22,7 +24,7 @@ class SaleOverviewController extends Controller
     ) {
     }
 
-    public function index(PaginationRequest $request): View
+    public function index(PaginationRequest $request)
     {
         $filters = [
             'mode' => Mode::LIVE,
@@ -31,15 +33,15 @@ class SaleOverviewController extends Controller
             'paymentStatus' => [PaymentStatus::PAID, PaymentStatus::OPEN],
         ];
 
-        $orderResponse = $this->orderService->getOrders($filters, $request->getPage());
+        $response = $this->orderService->getOrders($filters, $request->getPage());
 
         $orders = $this->orderService->mapOrdersToArray(
-            orders: BodyToOrder::buildMulti($orderResponse['data'])
+            orders: BodyToOrder::buildMulti($response[0]['data'])
         );
 
         $paginatedOrders = $this->orderService->paginateOrders(
             orders: $orders,
-            meta: $orderResponse['meta'],
+            meta: $response[0]['meta'],
             path: '/sales-overview'
         );
 
@@ -74,12 +76,12 @@ class SaleOverviewController extends Controller
         return redirect()->route('sales-overview.index')->with('success', 'Order claimed!');
     }
 
-    public function show(int $id): View
-    {
-        $order = $this->orderService->findOrder($id);
+    // public function show(int $id): View
+    // {
+    //     $order = $this->orderService->findOrder($id);
 
-        return view('sales-overview.show', [
-            'order' => $order,
-        ]);
-    }
+    //     return view('sales-overview.show', [
+    //         'order' => $order,
+    //     ]);
+    // }
 }

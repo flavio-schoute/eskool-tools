@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Actions\Address\CreateAddressAction;
@@ -66,7 +68,7 @@ class DebtorManagementController extends Controller
     }
 
     // Todo: Add return and move method to an other location maybe
-    public function sendFirstReminder(ValidateOrderIdRequest $request)
+    public function sendFirstReminder(ValidateOrderIdRequest $request): void
     {
         /** @var int $validatedDataId */
         $validatedDataId = $request->validated(['id']);
@@ -107,7 +109,7 @@ class DebtorManagementController extends Controller
          */
 
         /** @var int $validatedDataId */
-        $validatedDataId = $request->validated(['id']);
+        $request->validated(['id']);
 
         // $customer = $this->customerService->createCustomer([
         //     'full_name' => $order->billing()->contact()->firstName() . ' ' . $order->billing()->contact()->lastName(),
@@ -151,8 +153,6 @@ class DebtorManagementController extends Controller
         $products = $this->getUniqueProductLabels($order)->implode(', ');
 
         return [
-            // Customer data
-            'full_name' => $customerFullName,
             'first_name' => $customerFirstName,
             'last_name' => $customerLastName,
             'email' => $order->billing()->contact()->email(),

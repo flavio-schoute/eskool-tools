@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -17,9 +19,7 @@ class PlugAndPayServiceProvider extends ServiceProvider
             return new Client($accessToken);
         });
 
-        $this->app->singleton(OrderService::class, function () {
-            return new OrderService($this->app->make(Client::class));
-        });
+        $this->app->singleton(OrderService::class, fn (): \PlugAndPay\Sdk\Service\OrderService => new OrderService($this->app->make(Client::class)));
     }
 
     public function boot(): void

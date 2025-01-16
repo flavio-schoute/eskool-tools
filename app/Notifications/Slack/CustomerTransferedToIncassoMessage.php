@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications\Slack;
 
 use Illuminate\Bus\Queueable;
@@ -25,11 +27,11 @@ class CustomerTransferedToIncassoMessage extends Notification implements ShouldQ
     {
         return (new SlackMessage())
             ->headerBlock('Klant overgezet naar incasso')
-            ->contextBlock(function (ContextBlock $block) {
+            ->contextBlock(function (ContextBlock $block): void {
                 $block->text('Factuur: [Duck Duck Go](https://duckduckgo.com)')->markdown();
             })
             ->dividerBlock()
-            ->sectionBlock(function (SectionBlock $block) {
+            ->sectionBlock(function (SectionBlock $block): void {
                 $block->text('Klantgegevens:');
                 $block->field("*Volledige naam:*\ntodo")->markdown();
                 $block->field("*Nummer:*\ntodo")->markdown();

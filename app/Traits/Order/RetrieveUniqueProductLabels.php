@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Traits\Order;
 
 use Illuminate\Support\Collection;
@@ -16,9 +18,7 @@ trait RetrieveUniqueProductLabels
     public function getUniqueProductLabels(Order $order): Collection
     {
         return collect($order->items())
-            ->flatMap(function (Item $item): array {
-                return [$item->label()];
-            })
+            ->flatMap(fn(Item $item): array => [$item->label()])
             ->unique()
             ->values();
     }

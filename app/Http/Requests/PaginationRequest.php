@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -21,6 +23,7 @@ class PaginationRequest extends FormRequest
 
     public function getPage(): int
     {
-        return (int) $this->get('page', 1);
+        /** @return int */
+        return $this->get('page', 1);
     }
 }
