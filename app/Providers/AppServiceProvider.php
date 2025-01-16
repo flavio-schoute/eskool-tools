@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureCurrencies();
         $this->configureUrls();
         $this->configureVite();
+        $this->configureLanguage();
     }
 
     /**
@@ -77,7 +79,9 @@ class AppServiceProvider extends ServiceProvider
      */
     private function configureUrls(): void
     {
-        URL::forceScheme('https');
+        if (app()->isProduction()) {
+            URL::forceScheme('https');
+        }
     }
 
     /**
@@ -86,5 +90,13 @@ class AppServiceProvider extends ServiceProvider
     private function configureVite(): void
     {
         Vite::useAggressivePrefetching();
+    }
+
+    /**
+     * Configure the application's language.
+     */
+    private function configureLanguage(): void
+    {
+        App::setLocale('NL');
     }
 }

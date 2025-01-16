@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <x-header>
-            {{ __('Verkoop overzicht') }}
+            {{ __('Sales Overview') }}
         </x-header>
     </x-slot>
 
@@ -23,27 +23,27 @@
                                 <tr>
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Invoice Number
+                                        {{ __('Invoice number') }}
                                     </th>
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Invoice Date
+                                        {{ __('Invoice date') }}
                                     </th>
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Full Name
+                                        {{ __('Full name') }}
                                     </th>
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Product
+                                        {{ __('Product') }}
                                     </th>
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Amount
+                                        {{ __('Amount') }}
                                     </th>
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Actions
+                                        {{ __('Actions') }}
                                     </th>
                                 </tr>
                             </thead>

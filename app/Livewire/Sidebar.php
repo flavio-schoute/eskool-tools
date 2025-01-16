@@ -9,7 +9,7 @@ use Livewire\Component;
 
 class Sidebar extends Component
 {
-    public $showSidebar = false;
+    public bool $showSidebar = false;
 
     public function toggleSidebar(): void
     {

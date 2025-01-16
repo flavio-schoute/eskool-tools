@@ -6,12 +6,8 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    @if (auth()->user())
-                        <span>Welkom {{ auth()->user()->name }}, je logt voor de eerste keer in!</span>
-                    @else
-                        <span>Welkom terug {{ auth()->user()->name }} </span>
-                    @endif
+                <div class="p-6">   
+                    <span>Welkom!</span>
                 </div>
                 <div class="p-6">
                     <span id="current-time">{{ \Carbon\Carbon::now()->format('d/m/Y - H:i:s') }}</span>
