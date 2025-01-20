@@ -31,7 +31,7 @@ class Customer extends Model
     /**
      * Get the addresses from the customer.
      *
-     * @return belongsToMany<Address, covariant $this>
+     * @return belongsToMany<Address, $this>
      */
     public function addresses(): BelongsToMany
     {
@@ -41,7 +41,7 @@ class Customer extends Model
     /**
      * Get the orders from the customer.
      *
-     * @return hasMany<Order, covariant $this>
+     * @return hasMany<Order, $this>
      */
     public function orders(): HasMany
     {
@@ -49,7 +49,7 @@ class Customer extends Model
     }
 
     /**
-     * @return hasMany<Debtor, covariant $this>
+     * @return hasMany<Debtor, $this>
      */
     public function debtors(): HasMany
     {

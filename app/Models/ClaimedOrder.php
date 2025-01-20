@@ -12,7 +12,7 @@ class ClaimedOrder extends Model
     /**
      * Get the user who claimed the order.
      *
-     * @return belongsTo<User, covariant $this>
+     * @return belongsTo<User, $this>
      */
     public function user(): BelongsTo
     {

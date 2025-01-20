@@ -39,7 +39,7 @@ class Debtor extends Model
     }
 
     /**
-     * @return belongsTo<Customer, covariant $this>
+     * @return belongsTo<Customer, $this>
      */
     public function customer(): BelongsTo
     {
@@ -49,7 +49,7 @@ class Debtor extends Model
     /**
      * Get the order that belongs to the debtor.
      *
-     * @return belongsTo<Order, covariant $this>
+     * @return belongsTo<Order, $this>
      */
     public function order(): BelongsTo
     {

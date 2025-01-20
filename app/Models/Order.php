@@ -38,7 +38,7 @@ class Order extends Model
     /**
      * Get the customer associated with the order.
      *
-     * @return BelongsTo<Customer, covariant $this>
+     * @return BelongsTo<Customer, $this>
      */
     public function customer(): BelongsTo
     {
@@ -48,7 +48,7 @@ class Order extends Model
     /**
      * Get the customers billing address associated with the order.
      *
-     * @return BelongsTo<Address, covariant $this>
+     * @return BelongsTo<Address, $this>
      */
     public function billingAddress(): BelongsTo
     {
@@ -58,7 +58,7 @@ class Order extends Model
     /**
      * Get the debtor associated with the order.
      *
-     * @return HasOne<Debtor, covariant $this>
+     * @return HasOne<Debtor, $this>
      */
     public function debtors(): HasOne
     {

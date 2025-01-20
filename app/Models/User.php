@@ -59,7 +59,7 @@ class User extends Authenticatable
     /**
      * Get the user's claimed orders.
      *
-     * @return HasMany<ClaimedOrder, covariant $this>
+     * @return HasMany<ClaimedOrder, $this>
      */
     public function claimedOrders(): HasMany
     {
