@@ -47,5 +47,3 @@ make lint
 ```bash
 ./vendor/bin/rector
 ```
-
-Test of alle werkt.
