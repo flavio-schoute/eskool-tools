@@ -13,6 +13,7 @@ services:
         volumes:
             - .:/var/www/html
             - .dev/docker/php/settings/php.ini:/usr/local/etc/php/php.ini
+            - ~/.gitconfig:/root/.gitconfig:ro
         networks:
             - application
         depends_on:
